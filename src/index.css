@@ -11,3 +11,10 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+.tableView {
+  display: flex;
+  align-items: flex-start;
+  padding-left: 20%;
+}
