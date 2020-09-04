@@ -9,21 +9,23 @@ class OpenHouseSearch extends React.Component<any, any> {
             searchStr: "",
             classesData: [],
             filtertedData: [],
-            pageCount: 0
+            pageCount: 0,
+            perPage: 3,
+            offset: 0,
         }
     }
 
-    handlePageClick = (e: any) => {
+    handlePageClick = (index: number) => {
         const { perPage, classesData } = this.state
-        const selectedPage = e.selected;
-        const offset = selectedPage * 10;
+        const selectedPage = index;
+        const offset = selectedPage - 1 * 10;
 
         this.setState({
-            currentPage: selectedPage,
+            currentPage: index,
             offset: offset
         }, () => {
-            const slice = classesData.slice(this.state.offset, this.state.offset + 10)
-            this.setState({ filtertedData: slice })
+            const slicedData = classesData && classesData.slice(this.state.offset, this.state.offset + perPage)
+            this.setState({ filtertedData: slicedData })
         });
     };
 
@@ -32,9 +34,10 @@ class OpenHouseSearch extends React.Component<any, any> {
         const url = `https://www.googleapis.com/customsearch/v1?key=AIzaSyD65TNXHpGCH9EiGY6g9_yDahQXT9JfISQ&cx=018264299595958242005:dvs2adlrsca&q=${this.state.searchStr}`
         fetch(url)
             .then(respose => respose.json())
-            .then(data => {
-                const slice = data && data.items && data.items.slice(this.state.offset, this.state.offset + this.state.perPage)
-                this.setState({ classesData: data.items,  pageCount: Math.ceil(data.length / 10), filtertedData: slice })
+            .then(dataRes => {
+                const data = dataRes.items;
+                const slice = data && data.slice(this.state.offset, this.state.offset + this.state.perPage);
+                this.setState({ classesData: data,  pageCount: Math.ceil(data.length / perPage), filtertedData: slice, currentPage: 1 });
             })
             .catch((e: Error) => console.log("Error", e))
     }
@@ -44,11 +47,17 @@ class OpenHouseSearch extends React.Component<any, any> {
     }
 
     render(): React.ReactNode {
-      const {searchStr, classesData, filtertedData} = this.state;
+      const { searchStr, classesData, filtertedData, pageCount, offset, currentPage } = this.state;
       return (
         <div>
             <input type="text" onChange={this.updatedStr} value={searchStr}/>
-            {(filtertedData && filtertedData.map((stableRo: any) => <TableRow data={stableRo}/> ))}
+            {( filtertedData && filtertedData.map((stableRo: any) => <TableRow data={stableRo}/> ))}
+
+            <div className="tableView">
+               {[...Array(pageCount)].map((x, i) =>
+                   <div className={currentPage === i+1 ? `paginateView activePaginate` : "paginateView"} onClick={() => this.handlePageClick(i + 1)}> {i + 1} </div>
+               )}
+           </div>
         </div>
         );
     }

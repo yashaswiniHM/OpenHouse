@@ -18,3 +18,20 @@ code {
   align-items: flex-start;
   padding-left: 20%;
 }
+
+.paginateView {
+  justify-content: center;
+  /* border: "1px solid"; */
+  border-style: solid;
+  border-width: 1px;
+  padding: 10px;
+}
+
+.pagesView {
+  width: 40px;
+  height: 40px;
+}
+
+.activePaginate {
+  background-color: cadetblue
+}
