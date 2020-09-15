@@ -1,4 +1,7 @@
 
+/* Pagination Based on Search */
+
+
 import * as React from "react";
 import { TableRow } from "./TableRow"
 
@@ -15,10 +18,18 @@ class OpenHouseSearch extends React.Component<any, any> {
         }
     }
 
+
     handlePageClick = (index: number) => {
         const { perPage, classesData } = this.state
         const selectedPage = index;
         const offset = selectedPage - 1 * 10;
+
+        // this.setState((prevsState: any) => ({
+        //     ...prevsState,
+        //     filtertedData: "sss"
+        // }))
+
+        // this.setState({ filtertedData: [...this.state.filtertedData, ]})
 
         this.setState({
             currentPage: index,
@@ -64,3 +75,8 @@ class OpenHouseSearch extends React.Component<any, any> {
 }
 
 export default OpenHouseSearch
+
+
+
+
+
